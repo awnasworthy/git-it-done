@@ -7,22 +7,23 @@ var getUserRepos = function(user) {
     // format the github api url
     var apiUrl = "https://api.github.com/users/" + user + "/repos";
   
-    // make a request to the url
-    fetch(apiUrl)
-    .then(function(response) {
-      // request was successful
-      if (response.ok) {
-        response.json().then(function(data) {
-          displayRepos(data, user);
-        });
-      } else {
-        alert('Error: GitHub User Not Found');
+    // make a get request to url
+fetch(apiUrl).then(function(response) {
+  // request was successful
+  if (response.ok) {
+    response.json().then(function(data) {
+      displayIssues(data);
+
+      // check if api has paginated issues
+      if (response.headers.get("Link")) {
+        displayWarning(repo);
       }
-    })
-    .catch(function(error) {
-      // Notice this `.catch()` getting chained onto the end of the `.then()` method
-      alert("Unable to connect to GitHub");
     });
+  } else {
+    // if not successful, redirect to homepage
+    document.location.replace("./index.html");
+  }
+});
 };
 
 
